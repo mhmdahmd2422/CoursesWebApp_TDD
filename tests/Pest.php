@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 /*
@@ -14,7 +14,7 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +42,10 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function loginAsUser(\App\Models\User $user = null): \App\Models\User
 {
-    // ..
+    $user = $user ?? \App\Models\User::factory()->create();
+    \Pest\Laravel\actingAs($user);
+
+    return $user;
 }
