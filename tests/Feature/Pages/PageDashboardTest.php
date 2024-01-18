@@ -2,8 +2,6 @@
 
 use App\Models\Course;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use function Pest\Laravel\get;
 
 it('cannot be accessed by guests', function () {
@@ -18,7 +16,7 @@ it('lists purchased courses', function () {
             ['title' => 'Course B'],
         ))
         ->create();
-    $this->actingAs($user);
+    loginAsUser($user);
 
     get(route('pages.dashboard'))
         ->assertOk()
@@ -29,10 +27,9 @@ it('lists purchased courses', function () {
 });
 
 it('does not list any other courses', function () {
-    $user = User::factory()->create();
     $course = Course::factory()->create();
 
-    $this->actingAs($user);
+    loginAsUser();
     get(route('pages.dashboard'))
         ->assertOk()
         ->assertDontSeeText($course->title);
@@ -45,7 +42,7 @@ it('shows latest purchased courses first', function () {
 
     $user->courses()->attach($firstPurchasedCourse, ['created_at' => \Carbon\Carbon::yesterday()]);
     $user->courses()->attach($lastPurchasedCourse, ['created_at' => \Carbon\Carbon::now()]);
-    $this->actingAs($user);
+    loginAsUser($user);
 
     get(route('pages.dashboard'))
         ->assertOk()
@@ -58,9 +55,17 @@ it('shows latest purchased courses first', function () {
 it('includes link to product videos', function () {
     $user = User::factory()->has(Course::factory())->create();
 
-    $this->actingAs($user);
+    loginAsUser($user);
     get(route('pages.dashboard'))
         ->assertOk()
         ->assertSeeText('Watch Videos')
         ->assertSee(route('page.course-videos', Course::first()));
+});
+
+it('includes logout', function () {
+    loginAsUser();
+    get(route('pages.dashboard'))
+        ->assertOk()
+        ->assertSeeText('Log Out')
+        ->assertSee(route('logout'));
 });

@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
+use function Pest\Laravel\actingAs;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +43,10 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function loginAsUser(\App\Models\User $user = null): \App\Models\User
+function loginAsUser(?\App\Models\User $user = null): \App\Models\User
 {
     $user = $user ?? \App\Models\User::factory()->create();
-    \Pest\Laravel\actingAs($user);
+    actingAs($user);
 
     return $user;
 }
