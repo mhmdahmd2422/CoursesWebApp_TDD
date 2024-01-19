@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Course;
+use App\Models\User;
 use App\Models\Video;
 
 it('belongs to a course', function () {
@@ -18,4 +19,22 @@ it('gives back readable video duration', function () {
 
     expect($video->getReadableDuration())
         ->toEqual('10min');
+});
+
+it('tells if current user have already watched a given video', function () {
+    $user = User::factory()
+        ->has(Video::factory(), 'watchedVideos')
+        ->create();
+
+    loginAsUser($user);
+    expect($user->watchedVideos()->first()->alreadyWatchedByCurrentUser())
+        ->tobeTrue();
+});
+
+it('tells if current user have not watched a given video', function () {
+    $video = Video::factory()->create();
+
+    loginAsUser();
+    expect($video->alreadyWatchedByCurrentUser())
+        ->tobeFalse();
 });

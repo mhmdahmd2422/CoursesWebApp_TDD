@@ -2,7 +2,6 @@
 
 use App\Livewire\VideoPlayer;
 use App\Models\Course;
-use App\Models\User;
 use App\Models\Video;
 use Livewire\Livewire;
 
@@ -11,6 +10,10 @@ function createCourseWithVideos(int $videosCount = 1): Course
     return $course = Course::factory()
         ->has(Video::factory()->count($videosCount))->create();
 }
+
+beforeEach(function () {
+    $this->loggedInUser = loginAsUser();
+});
 
 it('shows details for given video', function () {
     $course = createCourseWithVideos();
@@ -54,35 +57,37 @@ it('does not include route for current video', function () {
 });
 
 it('marks a video as completed', function () {
-    $user = User::factory()->create();
     $course = createCourseWithVideos();
 
-    $user->purchasedCourses()->attach($course);
-    expect($user->watchedVideos)->toHaveCount(0);
+    $this->loggedInUser->purchasedCourses()->attach($course);
+    expect($this->loggedInUser->watchedVideos)->toHaveCount(0);
 
-    loginAsUser($user);
     Livewire::test(VideoPlayer::class, ['video' => $course->videos()->first()])
-        ->call('markVideoAsCompleted');
+        ->assertMethodWired('markVideoAsCompleted')
+        ->call('markVideoAsCompleted')
+        ->assertMethodNotWired('markVideoAsCompleted')
+        ->assertMethodWired('markVideoAsNotCompleted');
 
-    $user->refresh();
-    expect($user->watchedVideos)
+    $this->loggedInUser->refresh();
+    expect($this->loggedInUser->watchedVideos)
         ->toHaveCount(1)
         ->first()->title->toEqual($course->videos()->first()->title);
 });
 
 it('marks a video as not completed', function () {
-    $user = User::factory()->create();
     $course = createCourseWithVideos();
 
-    $user->purchasedCourses()->attach($course);
-    $user->watchedVideos()->attach($course->videos()->first());
-    expect($user->watchedVideos)->toHaveCount(1);
+    $this->loggedInUser->purchasedCourses()->attach($course);
+    $this->loggedInUser->watchedVideos()->attach($course->videos()->first());
+    expect($this->loggedInUser->watchedVideos)->toHaveCount(1);
 
-    loginAsUser($user);
     Livewire::test(VideoPlayer::class, ['video' => $course->videos()->first()])
-        ->call('markVideoAsNotCompleted');
+        ->assertMethodWired('markVideoAsNotCompleted')
+        ->call('markVideoAsNotCompleted')
+        ->assertMethodNotWired('markVideoAsNotCompleted')
+        ->assertMethodWired('markVideoAsCompleted');
 
-    $user->refresh();
-    expect($user->watchedVideos)
+    $this->loggedInUser->refresh();
+    expect($this->loggedInUser->watchedVideos)
         ->toHaveCount(0);
 });
