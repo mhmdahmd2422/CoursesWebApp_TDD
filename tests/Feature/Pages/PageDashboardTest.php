@@ -11,19 +11,15 @@ it('cannot be accessed by guests', function () {
 
 it('lists purchased courses', function () {
     $user = User::factory()
-        ->has(Course::factory()->count(2)->sequence(
-            ['title' => 'Course A'],
-            ['title' => 'Course B'],
-        ))
+        ->has(Course::factory()->count(2), 'purchasedCourses')
         ->create();
-    loginAsUser($user);
 
+    loginAsUser($user);
     get(route('pages.dashboard'))
         ->assertOk()
-        ->assertSeeText([
-            'Course A',
-            'Course B',
-        ]);
+        ->assertSeeText(
+            ...$user->purchasedCourses()->pluck('title')->toArray()
+        );
 });
 
 it('does not list any other courses', function () {
@@ -40,8 +36,8 @@ it('shows latest purchased courses first', function () {
     $firstPurchasedCourse = Course::factory()->create();
     $lastPurchasedCourse = Course::factory()->create();
 
-    $user->courses()->attach($firstPurchasedCourse, ['created_at' => \Carbon\Carbon::yesterday()]);
-    $user->courses()->attach($lastPurchasedCourse, ['created_at' => \Carbon\Carbon::now()]);
+    $user->purchasedCourses()->attach($firstPurchasedCourse, ['created_at' => \Carbon\Carbon::yesterday()]);
+    $user->purchasedCourses()->attach($lastPurchasedCourse, ['created_at' => \Carbon\Carbon::now()]);
     loginAsUser($user);
 
     get(route('pages.dashboard'))
@@ -53,7 +49,7 @@ it('shows latest purchased courses first', function () {
 });
 
 it('includes link to product videos', function () {
-    $user = User::factory()->has(Course::factory())->create();
+    $user = User::factory()->has(Course::factory(), 'purchasedCourses')->create();
 
     loginAsUser($user);
     get(route('pages.dashboard'))
