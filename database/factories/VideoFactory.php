@@ -20,7 +20,7 @@ class VideoFactory extends Factory
         return [
             'course_id' => Course::factory(),
             'slug' => fake()->slug,
-            'vimeo_id' => fake()->uuid,
+            'vimeo_id' => mt_rand(10000000,99999999),
             'title' => fake()->word,
             'description' => fake()->sentence,
             'duration_in_mins' => fake()->numberBetween(1, 99),

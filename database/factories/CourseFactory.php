@@ -23,6 +23,7 @@ class CourseFactory extends Factory
             'title' => fake()->sentence,
             'description' => fake()->paragraph,
             'image_name' => fake()->image,
+            'released_at' => Carbon::yesterday(),
             'learnings' => [fake()->word, fake()->word, fake()->word],
         ];
     }
