@@ -26,13 +26,13 @@ it('includes a video player', function () {
 
 it('shows first course video by default', function () {
     $course = Course::factory()
-        ->has(Video::factory()->state(['title' => 'my video']))
+        ->has(Video::factory())
         ->create();
 
     loginAsUser();
     get(route('page.course-videos', $course))
         ->assertOk()
-        ->assertSeeText('my video');
+        ->assertSee("<h3>{$course->videos()->first()->title}", false);
 });
 
 it('show provided course video', function () {
