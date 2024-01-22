@@ -18,12 +18,12 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
+            'paddle_price_id' => fake()->uuid,
             'slug' => fake()->slug,
             'tagline' => fake()->sentence,
             'title' => fake()->sentence,
             'description' => fake()->paragraph,
             'image_name' => fake()->image,
-            'released_at' => Carbon::yesterday(),
             'learnings' => [fake()->word, fake()->word, fake()->word],
         ];
     }

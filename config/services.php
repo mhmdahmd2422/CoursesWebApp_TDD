@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'paddle' => [
+        'client-token' => env('PADDLE_CLIENT_TOKEN'),
+    ],
+
 ];

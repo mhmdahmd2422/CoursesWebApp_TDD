@@ -8,3 +8,11 @@
     @endforeach
 </ul>
 <img src="{{ asset("images/{$course->image_name}") }}" alt="Image of the Course {{ $course->title }}">
+<a href='#' class='paddle_button' data-theme='light' data-items='[{"priceId": "{{$course->paddle_price_id}}","quantity": 1}]'>Buy Now</a>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script type="text/javascript">
+    @env('local')
+    Paddle.Environment.set('sandbox');
+    @endenv
+    Paddle.Setup({token:'{{config('services.paddle.client-token')}}'});
+</script>

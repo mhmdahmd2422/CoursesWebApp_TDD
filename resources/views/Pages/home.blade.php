@@ -8,6 +8,8 @@
 @endguest
 
 @foreach($courses as $course)
-    <h1>{{$course->title}}</h1>
+    <a href="{{ route('pages.course-details', $course) }}">
+        <h1>{{$course->title}}</h1>
+    </a>
     <p>{{$course->description}}</p>
 @endforeach

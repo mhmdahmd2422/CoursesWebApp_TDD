@@ -16,11 +16,11 @@ class AddGivenCoursesSeeder extends Seeder
             return;
         }
 
-        Course::factory()->count(3)
+        Course::factory()->released()->count(3)
             ->sequence(
-                ['title' => 'Laravel For Beginners'],
-                ['title' => 'Advanced Laravel'],
-                ['title' => 'TDD The Laravel Way']
+                ['title' => 'Laravel For Beginners', 'paddle_price_id' => 'pri_01hmmnet44vr1bcs6wgh9wmvfq'],
+                ['title' => 'Advanced Laravel', 'paddle_price_id' => 'pri_01hmq55wfak6x55hynk1g4a483'],
+                ['title' => 'TDD The Laravel Way', 'paddle_price_id' => 'pri_01hmq581ce83ran1ezeswznv4e']
             )
             ->create();
     }
