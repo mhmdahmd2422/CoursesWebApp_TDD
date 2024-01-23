@@ -33,6 +33,7 @@ return [
 
     'paddle' => [
         'client-token' => env('PADDLE_CLIENT_TOKEN'),
+        'secret-key' => env('PADDLE_SECRET_KEY'),
     ],
 
 ];
