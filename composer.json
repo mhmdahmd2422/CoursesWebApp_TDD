@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "spatie/laravel-login-link": "^1.1",
-        "spatie/laravel-webhook-client": "^3.2"
+        "spatie/laravel-webhook-client": "^3.2",
+      "ext-openssl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
