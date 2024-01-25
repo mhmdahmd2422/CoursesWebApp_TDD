@@ -26,6 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'paddle_customer_id',
         'name',
         'email',
         'password',
