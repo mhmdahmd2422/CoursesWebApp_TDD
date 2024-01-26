@@ -54,7 +54,7 @@ it('includes link to product videos', function () {
     loginAsUser($user);
     get(route('pages.dashboard'))
         ->assertOk()
-        ->assertSeeText('Watch Videos')
+        ->assertSeeText('Watch videos')
         ->assertSee(route('page.course-videos', Course::first()));
 });
 

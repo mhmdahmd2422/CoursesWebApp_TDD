@@ -44,5 +44,5 @@ it('includes paddle checkout button', function () {
         ->assertOk()
         ->assertSee('<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>', false)
         ->assertSee("Paddle.Setup({token:'".config('services.paddle.client-token')."'});", false)
-        ->assertSee("<a href='#' class='paddle_button' data-theme='light' data-items='[".'{"priceId": "'.$course->paddle_price_id.'","quantity": 1}]'."'".'>Buy Now</a>', false);
+        ->assertSee("<a href='#!' data-theme='none' data-items='[".'{"priceId": "'.$course->paddle_price_id.'","quantity": 1}]'."'", false);
 });
