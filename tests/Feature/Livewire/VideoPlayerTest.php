@@ -32,7 +32,7 @@ it('shows given video', function () {
     $video = $course->videos->first();
 
     Livewire::test(VideoPlayer::class, ['video' => $video])
-        ->assertSeeHtml('<iframe src="https://player.vimeo.com/video/'.$video->vimeo_id.'"');
+        ->assertSeeHtml('<iframe class="w-full aspect-video rounded mb-4 md:mb-4" src="https://player.vimeo.com/video/'.$video->vimeo_id.'"');
 });
 
 it('shows list of all course videos', function () {
@@ -62,11 +62,13 @@ it('marks a video as completed', function () {
     $this->loggedInUser->purchasedCourses()->attach($course);
     expect($this->loggedInUser->watchedVideos)->toHaveCount(0);
 
-    Livewire::test(VideoPlayer::class, ['video' => $course->videos()->first()])
+    $firstVideo = $course->videos()->first();
+    Livewire::test(VideoPlayer::class, ['video' => $firstVideo])
         ->assertMethodWired('markVideoAsCompleted')
         ->call('markVideoAsCompleted')
         ->assertMethodNotWired('markVideoAsCompleted')
-        ->assertMethodWired('markVideoAsNotCompleted');
+        ->assertMethodWired('markVideoAsNotCompleted')
+        ->assertSee($firstVideo->title.' <!--[if BLOCK]><![endif]-->✅', false);
 
     $this->loggedInUser->refresh();
     expect($this->loggedInUser->watchedVideos)
