@@ -8,7 +8,6 @@ class TwitterClient implements TwitterClientInterface
 {
     public function __construct(protected TwitterOAuth $twitter)
     {
-        $this->twitter->setTimeouts(10, 10);
     }
 
     public function tweet(string $text): array
