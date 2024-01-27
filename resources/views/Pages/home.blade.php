@@ -1,4 +1,19 @@
-<x-guest-layout>
+<x-guest-layout :page-title="config('app.name').' - Home'">
+
+    @push('social-meta')
+        <meta name="description" content="{{config('app.name')}} is the leading learning platform for Laravel developers.">
+
+        {{-- Open Graph / Facebook --}}
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{route('pages.home')}}">
+        <meta property="og:title" content="{{config('app.name')}}">
+        <meta property="og:description" content="{{config('app.name')}} is the leading learning platform for Laravel developers.">
+        <meta property="og:image" content="{{asset('images/social.png')}}">
+
+        {{-- Twitter --}}
+        <meta name="twitter:card" content="summary_large_image">
+    @endpush
+
     <main>
         <div class="bg-indigo-500 pt-10 sm:pt-16 lg:overflow-hidden lg:pt-8 lg:pb-14">
             <div class="mx-auto max-w-7xl lg:px-8">
@@ -7,11 +22,11 @@
                         class="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:flex lg:items-center lg:px-0 lg:text-left">
                         <div class="lg:py-24">
                             <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
-                                <span class="block">A cast a day</span>
+                                <span class="block">A Course a day</span>
                                 <span
                                     class="block bg-gradient-to-r from-yellow-500 to-yellow-200 bg-clip-text pb-3 text-transparent sm:pb-5">keeps bugs away</span>
                             </h1>
-                            <p class="text-base text-gray-200 sm:text-xl lg:text-lg xl:text-xl"><strong>EgyCourses</strong> is the
+                            <p class="text-base text-gray-200 sm:text-xl lg:text-lg xl:text-xl"><strong>{{config('app.name')}}</strong> is the
                                 leading learning platform for Laravel developers.</p>
                         </div>
                     </div>

@@ -7,8 +7,9 @@
 
         @include('partials.favicon')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $pageTitle }}</title>
 
+        @stack('social-meta')
         <!-- Fonts -->
 
         <!-- Scripts -->
