@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Course;
+
 use function Pest\Laravel\get;
 
 it('shows courses overview', function () {
@@ -68,4 +69,31 @@ it('includes courses links', function () {
             route('pages.course-details', $courses[1]),
             route('pages.course-details', $courses[2]),
         ]);
+});
+
+it('includes title', function () {
+    $expectedTitle = config('app.name').' - Home';
+
+    $response = get(route('pages.home'))
+        ->assertOk();
+
+    $seo = new Juampi92\TestSEO\TestSEO($response->getContent());
+    expect($seo->data)
+        ->title()->toBe($expectedTitle);
+});
+
+it('includes social tags', function () {
+    $response = get(route('pages.home'))
+        ->assertOk();
+
+    $seo = new Juampi92\TestSEO\TestSEO($response->getContent());
+    expect($seo->data)
+        ->description()->toBe(config('app.name').' is the leading learning platform for Laravel developers.')
+        ->openGraph()->type->toBe('website')
+        ->openGraph()->url->toBe(route('pages.home'))
+        ->openGraph()->title->toBe(config('app.name'))
+        ->openGraph()->description->toBe(config('app.name').' is the leading learning platform for Laravel developers.')
+        ->openGraph()->image->toBe(asset('images/social.png'))
+        ->twitter()->card->toBe('summary_large_image');
+
 });

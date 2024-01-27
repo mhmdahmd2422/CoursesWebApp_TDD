@@ -46,3 +46,32 @@ it('includes paddle checkout button', function () {
         ->assertSee("Paddle.Setup({token:'".config('services.paddle.client-token')."'});", false)
         ->assertSee("<a href='#!' data-theme='none' data-items='[".'{"priceId": "'.$course->paddle_price_id.'","quantity": 1}]'."'", false);
 });
+
+it('includes title', function () {
+    $course = Course::factory()->released()->create();
+    $expectedTitle = config('app.name')." - $course->title";
+
+    $response = get(route('pages.course-details', $course))
+        ->assertOk();
+
+    $seo = new Juampi92\TestSEO\TestSEO($response->getContent());
+    expect($seo->data)
+        ->title()->toBe($expectedTitle);
+});
+
+it('includes social tags', function () {
+    $course = Course::factory()->released()->create();
+
+    $response = get(route('pages.course-details', $course))
+        ->assertOk();
+
+    $seo = new Juampi92\TestSEO\TestSEO($response->getContent());
+    expect($seo->data)
+        ->description()->toBe($course->description)
+        ->openGraph()->type->toBe('website')
+        ->openGraph()->url->toBe(route('pages.course-details', $course))
+        ->openGraph()->title->toBe($course->title)
+        ->openGraph()->description->toBe($course->description)
+        ->openGraph()->image->toBe(asset("images/$course->image_name"))
+        ->twitter()->card->toBe('summary_large_image');
+});
